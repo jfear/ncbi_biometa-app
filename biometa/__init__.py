@@ -4,8 +4,8 @@ from flask_principal import identity_loaded, UserNeed, RoleNeed
 
 from biometa.models import db
 from biometa.extensions import login_manager, principal
-from biometa.controllers.main import main_blueprint
-from biometa.controllers.blog import blog_blueprint
+from biometa.main import main_bp
+from biometa.auth import auth_bp
 
 def create_app(config_object):
     app = Flask(__name__)
@@ -15,8 +15,8 @@ def create_app(config_object):
     login_manager.init_app(app)
     principal.init_app(app)
 
-    app.register_blueprint(main_blueprint)
-    app.register_blueprint(blog_blueprint)
+    app.register_blueprint(main_bp)
+    app.register_blueprint(auth_bp)
 
 
     @identity_loaded.connect_via(app)

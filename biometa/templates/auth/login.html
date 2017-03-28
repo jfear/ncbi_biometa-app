@@ -4,6 +4,7 @@
 
 {% block body %}
 <div class="row">
+    <h2>Login</h2>
     <div class="col-lg-4"></div>
     <div class="col-lg-4">
         <form role="form" action="{{ url_for('.login') }}" method="post">
@@ -17,15 +18,6 @@
                     {% endfor %}
                 {% endif %}
                 {{ form.username(class_="form-control") }}
-            </div>
-            <div class="form-group">
-                {{ form.password.label }}
-                {% if form.password.errors %}
-                    {% for e in form.password.errors %}
-                        <p class="form-text">{{ e }}</p>
-                    {% endfor %}
-                {% endif %}
-                {{ form.password(class_="form-control") }}
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>

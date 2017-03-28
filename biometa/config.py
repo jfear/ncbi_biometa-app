@@ -1,13 +1,14 @@
 class Config(object):
     SECRET_KEY = 'XMLZODSHE8N6NFOZDPZA2HULWSIYJU45K6N4ZO9M'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    MONGODB_HOST = '128.231.83.74'
+    MONGODB_PORT = 27022
 
 
 class ProdConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
+    MONGODB_DB = 'sra2'
     DEBUG = False
 
 
 class DevConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
+    MONGODB_DB = 'test'
     DEBUG = None
