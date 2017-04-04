@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_bootstrap import Bootstrap
 from flask_login import current_user
 from flask_principal import identity_loaded, UserNeed, RoleNeed
 
@@ -7,11 +8,14 @@ from biometa.extensions import login_manager, principal
 from biometa.main import main_bp
 from biometa.auth import auth_bp
 
+bootstrap = Bootstrap()
+
 def create_app(config_object):
     app = Flask(__name__)
     app.config.from_object(config_object)
 
     db.init_app(app)
+    bootstrap.init_app(app)
     login_manager.init_app(app)
     principal.init_app(app)
 
@@ -31,9 +35,9 @@ def create_app(config_object):
         # Add each role to the identity
         if hasattr(current_user, 'roles'):
             for role in current_user.roles:
-                identity.provides.add(RoleNeed(role.name))
+                identity.provides.add(RoleNeed(role))
 
     return app
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

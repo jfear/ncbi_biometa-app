@@ -6,17 +6,10 @@ from sramongo.mongo_schema import Pubmed
 
 db = MongoEngine()
 
-class Role(db.EmbeddedDocument):
-    name = db.StringField()
-    description = db.StringField()
-
-    def __repr__(self):
-        return '<Role {}>'.format(self.name)
-
 
 class User(db.Document, UserMixin):
     username = db.StringField(unique=True, required=True)
-    roles = db.ListField(db.EmbeddedDocumentField(Role), default=list)
+    roles = db.ListField(db.StringField(), default=list)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -34,7 +27,7 @@ class Experiment(db.EmbeddedDocument):
 
 
 class Annotation(db.EmbeddedDocument):
-    tag = db.StringField()
+    name = db.StringField()
     value = db.StringField()
 
 
@@ -44,13 +37,19 @@ class Biometa(db.Document):
     gsm = db.StringField()
     srp = db.StringField()
     bioproject = db.StringField()
+    study_title = db.StringField()
+    study_abstract = db.StringField()
 
     contacts = db.ListField(db.EmbeddedDocumentField(Contacts), default=list)
     papers = db.ListField(db.EmbeddedDocumentField(Pubmed), default=list)
     experiments = db.ListField(db.EmbeddedDocumentField(Experiment), default=list)
 
-    jean = db.EmbeddedDocumentField(Annotation)
-    zhenxia = db.EmbeddedDocumentField(Annotation)
-    brian = db.EmbeddedDocumentField(Annotation)
-    justin = db.EmbeddedDocumentField(Annotation)
-    nlm = db.EmbeddedDocumentField(Annotation)
+    taxon_id = db.StringField()
+    sample_title = db.StringField()
+    sample_attributes = db.ListField(db.EmbeddedDocumentField(Annotation), default=list)
+
+    jean = db.ListField(db.EmbeddedDocumentField(Annotation))
+    zhenxia = db.ListField(db.EmbeddedDocumentField(Annotation))
+    brian = db.ListField(db.EmbeddedDocumentField(Annotation))
+    justin = db.ListField(db.EmbeddedDocumentField(Annotation))
+    nlm = db.ListField(db.EmbeddedDocumentField(Annotation))

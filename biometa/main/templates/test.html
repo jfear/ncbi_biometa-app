@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Test{% endblock %}
+
+{% block page_content %}
+  <h1>Test</h1>
+  {{ wtf.quick_form(form) }}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+      <link   rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
+  <script>
+  $(function() {
+      $.ajax({
+        url: '{{ url_for("main.autocomplete") }}'
+        }).done(function (data) {
+          $('#autocomplete').autocomplete({
+              source: data.json_list,
+              minLength: 2
+        });
+      });
+    });
+  </script>
+{% endblock %}

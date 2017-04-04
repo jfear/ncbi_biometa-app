@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Sample{% endblock %}
+{% block page_content %}
+<div class="page-header">
+  <h1>Sample Summary</h1>
+</div>
+
+<div class="row">
+  <h2>Project Information</h2>
+  <div class="col-lg-6">
+    <dl class="dl-horizontal">
+      {% if sample.bioproject %}
+        <dt>BioProject:</dt>
+        <dd><a href="https://www.ncbi.nlm.nih.gov/bioproject/{{ sample.bioproject }}">{{ sample.bioproject }}</a></dd>
+      {% endif %}
+
+      {% if sample.srp %}
+        <dt>SRA Study:</dt>
+        <dd><a href="https://trace.ncbi.nlm.nih.gov/Traces/sra/?study={{ sample.srp }}">{{ sample.srp }}</a></dd>
+      {% endif %}
+
+      {% if sample.contacts|length > 0 %}
+        <dt>Contact:</dt>
+        {% for contact in sample.contacts %}
+          <dd>
+            {{ contact.first_name }}
+            {{ contact.last_name }}
+            <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+          </dd>
+        {% endfor %}
+      {% endif %}
+    </dl>
+  </div>
+
+  <div class="col-lg-6">
+    <dl class="dl-horizontal">
+      {% if sample.abstract %}
+        <dt>Abstract:</dt>
+        <dd> {{ sample.abstract }} </dd>
+      {% endif %}
+    </dl>
+  </div>
+</div>
+
+<div class="row">
+  <h2>Sample Information</h2>
+  <div class="col-lg-6">
+    <dl class="dl-horizontal">
+      <dt>
+      <dt>BioSample:</dt>
+      <dd><a href="https://www.ncbi.nlm.nih.gov/biosample/{{ sample.biosample }}">{{ sample.biosample }}</a></dd>
+
+      {% if sample.gsm %}
+        <dt>GEO Sample:</dt>
+        <dd><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc={{ sample.gsm }}">{{ sample.gsm }}</a></dd>
+      {% endif %}
+
+      {% if sample.srs %}
+        <dt>SRA Sample:</dt>
+        <dd><a href="https://www.ncbi.nlm.nih.gov/sra/?term={{ sample.srs }}">{{ sample.srs }}</a></dd>
+      {% endif %}
+    </dl>
+
+    <h4>Author Annotation</h3>
+
+    <dl class="dl-horizontal">
+      {% if sample.taxon_id %}
+        <dt>Taxon ID:</dt>
+        <dd>{{ sample.taxon_id }}</dd>
+      {% endif %}
+
+      {% if sample.sample_title %}
+        <dt>Sample Title</dt>
+        <dd>{{ sample.sample_title }}</dd>
+      {% endif %}
+
+      {% if sample.sample_attributes|length > 0 %}
+        {% for attribute in sample.sample_attributes %}
+        <dt>{{ attribute.name }}:</dt>
+        <dd>{{ attribute.value }}</dd>
+        {% endfor %}
+      {% endif %}
+    </dl>
+  </div>
+
+  <div class="col-lg-6">
+    <dl class="dl-horizontal">
+      <dt>Experiments:</dt>
+      {% for exp in sample.experiments %}
+        <dd>
+            <a href="https://www.ncbi.nlm.nih.gov/sra/{{ exp.srx }}[accn]">{{ exp.srx }}</a>
+            {% if exp.runs|length > 0 %}
+              ({% for run in exp.runs %}
+                {{ run }}
+                {% if not loop.last %} | {% endif %}
+              {% endfor %})
+            {% endif %}
+        </dd>
+      {% endfor %}
+    </dl>
+  </div>
+</div>
+
+<div class="row">
+  <h2>NIH Annotation</h2>
+</div>
+
+{% if sample.papers|length > 0 %}
+  <div class="row">
+    <h2>Papers</h2>
+    <div class="col-lg-12">
+      <dl class="dl-horizontal">
+        {% for paper in sample.papers %}
+          <dt><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ paper.pubmed_id }}">{{ paper.pubmed_id }}</a></dt>
+          <dd>
+            <p>
+              "{{ paper.title }}"
+              {% for author in paper.authors %}
+              <a href="#" data-toggle="tooltip" title="{{ author.affiliation }}">{{ author.last_name }}, {{ author.first_name }}</a>
+                {% if not loop.last %} ; {% endif %}
+              {% endfor %}
+            </p>
+            <p>{{ paper.abstract }}</p>
+          </dd>
+        {% endfor %}
+      </dl>
+    </div>
+  </div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>$(document).ready(function(){$('[data-toggle="tooltip"]').tooltip();});</script>
+{% endblock %}

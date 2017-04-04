@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+  <h1>SRA Biometa</h1>
+</div>
+
+<div class="row">
+  <div class="col-lg-2">
+    {{ wtf.quick_form(form) }}
+    <br>
+  </div>
+  <div class="col-lg-4"></div>
+  <div class="col-lg-6">
+    {{ render_navigation(paginated_table, 'main.home', form.per_pages.data) }}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>BioSample</th>
+          <th>Experiments</th>
+          <th>Contact</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for row in paginated_table.items %}
+        <tr>
+          <td>
+            <a href="{{ url_for('main.sample', sample=row.biosample) }}">{{ row.biosample }}</a>
+          </td>
+          <td>
+          {% for exp in row.experiments %}
+            {{ exp.srx }}
+            {% if not loop.last %}|{% endif %}
+          {%- endfor %}
+          </td>
+          <td>
+            {% if row.contacts|length > 0 %}
+              {{ row.contacts[0].first_name }}
+              {{ row.contacts[0].last_name }}
+              (<a href="mailto:{{ row.contacts[0].email }}">{{ row.contacts[0].email }}</a>)
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+
+      </tbody>
+    </table>
+    <ul>
+    </ul>
+  </div>
+</div>
+{% endblock %}

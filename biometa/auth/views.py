@@ -10,17 +10,20 @@ from flask_principal import Identity, AnonymousIdentity, identity_changed
 def login():
     form = LoginForm()
 
-    if form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit():
         user = User.objects(username=form.username.data).first()
 
-        login_user(user)
-        identity_changed.send(
-            current_app._get_current_object(),
-            identity=Identity(str(user.pk))
-        )
+        if user:
+            login_user(user)
+            identity_changed.send(
+                current_app._get_current_object(),
+                identity=Identity(str(user.pk))
+            )
 
-        flash("Logged in successfully.", "success")
-        return redirect(request.args.get("next") or url_for("main.home"))
+            flash("Logged in successfully.", "success")
+            return redirect(request.args.get("next") or url_for("main.home"))
+        else:
+            flash("There is no User with that name", "fail")
 
     return render_template("login.html", form=form)
 
@@ -43,9 +46,8 @@ def register():
     if request.method == 'POST' and form.validate_on_submit():
         user = User()
         user.username = form.username.data
+        user.roles = ['default']
         user.save()
-#         default_role = Role.query.filter_by(name="default").first()
-#         user.roles.append(default_role)
 
         flash("Your user has been created, please login.", category="success")
         return redirect(url_for(".register"))
