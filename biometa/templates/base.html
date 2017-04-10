@@ -8,80 +8,81 @@
 
 {# Macro for creating navigation links #}
 {% macro render_navigation(pagination, endpoint, per_pages) %}
-<nav aria-label="Page navigation">
+  <nav aria-label="Page navigation">
     {% set currPage = request.args.get('page', 1)|int %}
     <ul class="pagination pagination-sm">
-        {% if currPage != 1 %}
-        <li><a href="{{ url_for(endpoint, page=1, per_pages=per_pages) }}">&laquo;&laquo;</a></li>
-        {% else %}
-        <li class="disabled"><a href="{{ url_for(endpoint, page=1, per_pages=per_pages) }}">&laquo;&laquo;</a></li>
-        {% endif %}
+      {% if currPage != 1 %}
+      <li><a href="{{ url_for(endpoint, page=1, per_pages=per_pages) }}">&laquo;&laquo;</a></li>
+      {% else %}
+      <li class="disabled"><a href="{{ url_for(endpoint, page=1, per_pages=per_pages) }}">&laquo;&laquo;</a></li>
+      {% endif %}
 
-        {% if currPage > 5 %}
-        <li><a href="{{ url_for(endpoint, page=currPage - 5, per_pages=per_pages) }}">&laquo;</a></li>
-        {% else %}
-        <li class="disabled"><a href="#">&laquo;</a></li>
-        {% endif %}
+      {% if currPage > 5 %}
+      <li><a href="{{ url_for(endpoint, page=currPage - 5, per_pages=per_pages) }}">&laquo;</a></li>
+      {% else %}
+      <li class="disabled"><a href="#">&laquo;</a></li>
+      {% endif %}
 
-        {% for page in pagination.iter_pages() %}
-            {% if page %}
-                {% if page != pagination.page %}
-                    <li><a href="{{ url_for(endpoint, page=page, per_pages=per_pages) }}">{{ page }}</a></li>
-                {% else %}
-                    <li class="active"><a href="#">{{ page }}</a></li>
-                {% endif %}
-            {% else %}
-                <li class="disabled"><span class=ellipsis>…</span></li>
-            {% endif %}
-        {% endfor %}
+      {% for page in pagination.iter_pages() %}
+        {% if page %}
+          {% if page != pagination.page %}
+            <li><a href="{{ url_for(endpoint, page=page, per_pages=per_pages) }}">{{ page }}</a></li>
+          {% else %}
+            <li class="active"><a href="#">{{ page }}</a></li>
+          {% endif %}
+        {% else %}
+          <li class="disabled"><span class=ellipsis>…</span></li>
+        {% endif %}
+      {% endfor %}
     </ul>
-</nav>
+  </nav>
 {% endmacro %}
 
 {% block head %}
-    {{ super() }}
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  {{ super() }}
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 {% endblock %}
 
 {% block navbar %}
-<div class="navbar navbar-inverse" role="navigation">
+  <div class="navbar navbar-inverse" role="navigation">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{ url_for('main.home') }}">Biometa</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav"></ul>
-            <ul class="nav navbar-nav navbar-right">
-              {% if current_user.is_authenticated %}
-              <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
-              {% else %}
-              <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
-              <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-              {% endif %}
-            </ul>
-        </div>
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ url_for('main.home') }}">Biometa</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav"></ul>
+        <ul class="nav navbar-nav navbar-right">
+          {% if current_user.is_authenticated %}
+          <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+          {% else %}
+          <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+          <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+          {% endif %}
+        </ul>
+      </div>
     </div>
-</div>
+  </div>
 {% endblock %}
 
 {% block content %}
-<div class="container">
+  <div class="container">
     {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
+      <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         {{ message }}
-    </div>
+      </div>
     {% endfor %}
 
     {% block page_content %}{% endblock %}
-</div>
+
+  </div>
 {% endblock %}
 
 {% block scripts %}
