@@ -9,16 +9,3 @@ class PerPageForm(Form):
         choices=[(20, '20'), (40, '40'), (60, '60'), (100, '100')],
     )
     submit = SubmitField('Submit')
-
-class TestForm(Form):
-    autocomp = TextField(
-        'autocomp',
-        id='autocomplete'
-    )
-    selection = SelectField(
-        'selection',
-        choices=[(20, '20'), (40, '40'), (60, '60'), (100, '100')],
-    )
-
-class TestFormTwo(Form):
-    testList = FieldList(TextField('Name'), min_entries=2)

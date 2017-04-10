@@ -14,7 +14,7 @@
 
   <script>
   $(function() {
-      $.ajax({url: '{{ url_for("main.autocomplete_abc") }}'}).done(
+      $.ajax({url: '{{ url_for("sandbox.autocomplete_abc") }}'}).done(
           function (data) {
             $('#autocomplete').autocomplete({
                 source: data.json_list,

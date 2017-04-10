@@ -7,6 +7,7 @@ from biometa.models import db
 from biometa.extensions import login_manager, principal
 from biometa.main import main_bp
 from biometa.auth import auth_bp
+from biometa.sandbox import sandbox_bp
 
 bootstrap = Bootstrap()
 
@@ -21,6 +22,7 @@ def create_app(config_object):
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(sandbox_bp)
 
 
     @identity_loaded.connect_via(app)
