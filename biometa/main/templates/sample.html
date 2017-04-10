@@ -61,7 +61,7 @@
       {% endif %}
     </dl>
 
-    <h4>Author Annotation</h3>
+    <h3>Author Annotation</h3>
 
     <dl class="dl-horizontal">
       {% if sample.taxon_id %}
@@ -101,80 +101,82 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-lg-12">
-      <h2>NIH Annotation</h2>
+{% if sample.magic or sample.mieg or sample.nlm or sample.chen or sample.oliver %}
+  <div class="row">
+    <div class="col-lg-12">
+        <h2>NIH Annotation</h2>
+    </div>
   </div>
-</div>
 
-{% if sample.magic %}
-<div class="row">
-  <div class="col-lg-6">
-      <h3>MAGIC</h3>
-        <dl class="dl-horizontal">
-          {% for attr in sample.magic %}
-          <dt>{{ attr.name }}:</dt>
-            <dd>{{ attr.value }}</dd>
-          {% endfor %}
-        </dl>
+  {% if sample.magic %}
+  <div class="row">
+    <div class="col-lg-12">
+        <h3>MAGIC</h3>
+          <dl class="dl-horizontal">
+            {% for attr in sample.magic %}
+            <dt>{{ attr.name }}:</dt>
+              <dd>{{ attr.value }}</dd>
+            {% endfor %}
+          </dl>
+    </div>
   </div>
-</div>
-  {% endif %}
+    {% endif %}
 
-<div class="row">
-  {% if sample.mieg %}
-  <div class="col-lg-6">
-      <h3>Mieg</h3>
-        <dl class="dl-horizontal">
-          {% for attr in sample.mieg %}
-          <dt>{{ attr.name }}:</dt>
-            <dd>{{ attr.value }}</dd>
-          {% endfor %}
-        </dl>
+  <div class="row">
+    {% if sample.mieg %}
+    <div class="col-lg-6">
+        <h3>Mieg</h3>
+          <dl class="dl-horizontal">
+            {% for attr in sample.mieg %}
+            <dt>{{ attr.name }}:</dt>
+              <dd>{{ attr.value }}</dd>
+            {% endfor %}
+          </dl>
+    </div>
+    {% endif %}
+
+    {% if sample.nlm %}
+    <div class="col-lg-6">
+        <h3>NLM</h3>
+          <dl class="dl-horizontal">
+            {% for attr in sample.nlm %}
+            <dt>{{ attr.name }}:</dt>
+              <dd>{{ attr.value }}</dd>
+            {% endfor %}
+          </dl>
+    </div>
+    {% endif %}
+
   </div>
-  {% endif %}
 
-  {% if sample.nlm %}
-  <div class="col-lg-6">
-      <h3>NLM</h3>
-        <dl class="dl-horizontal">
-          {% for attr in sample.nlm %}
-          <dt>{{ attr.name }}:</dt>
-            <dd>{{ attr.value }}</dd>
-          {% endfor %}
-        </dl>
+  <div class="row">
+
+    {% if sample.chen %}
+    <div class="col-lg-6">
+        <h3>Chen</h3>
+          <dl class="dl-horizontal">
+            {% for attr in sample.chen %}
+            <dt>{{ attr.name }}:</dt>
+              <dd>{{ attr.value }}</dd>
+            {% endfor %}
+          </dl>
+    </div>
+    {% endif %}
+
+    {% if sample.oliver %}
+    <div class="col-lg-6">
+        <h3>Oliver</h3>
+          <dl class="dl-horizontal">
+            {% for attr in sample.oliver %}
+            <dt>{{ attr.name }}:</dt>
+              <dd>{{ attr.value }}</dd>
+            {% endfor %}
+          </dl>
+    </div>
+    {% endif %}
+
   </div>
-  {% endif %}
-
-</div>
-
-<div class="row">
-
-  {% if sample.chen %}
-  <div class="col-lg-6">
-      <h3>Chen</h3>
-        <dl class="dl-horizontal">
-          {% for attr in sample.chen %}
-          <dt>{{ attr.name }}:</dt>
-            <dd>{{ attr.value }}</dd>
-          {% endfor %}
-        </dl>
-  </div>
-  {% endif %}
-
-  {% if sample.oliver %}
-  <div class="col-lg-6">
-      <h3>Oliver</h3>
-        <dl class="dl-horizontal">
-          {% for attr in sample.oliver %}
-          <dt>{{ attr.name }}:</dt>
-            <dd>{{ attr.value }}</dd>
-          {% endfor %}
-        </dl>
-  </div>
-  {% endif %}
-
-</div>
+{% endif %}
 
 {% if sample.papers|length > 0 %}
   <div class="row">

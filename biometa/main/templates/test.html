@@ -14,14 +14,13 @@
 
   <script>
   $(function() {
-      $.ajax({
-        url: '{{ url_for("main.autocomplete") }}'
-        }).done(function (data) {
-          $('#autocomplete').autocomplete({
-              source: data.json_list,
-              minLength: 2
-        });
-      });
+      $.ajax({url: '{{ url_for("main.autocomplete_abc") }}'}).done(
+          function (data) {
+            $('#autocomplete').autocomplete({
+                source: data.json_list,
+                minLength: 2
+            });
+          });
     });
   </script>
 {% endblock %}
