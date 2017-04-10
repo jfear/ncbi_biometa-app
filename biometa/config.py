@@ -11,4 +11,4 @@ class ProdConfig(Config):
 
 class DevConfig(Config):
     MONGODB_DB = 'test'
-    DEBUG = None
+    DEBUG = True
