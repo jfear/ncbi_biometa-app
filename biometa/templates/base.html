@@ -86,5 +86,5 @@
 
 {% block scripts %}
   {{ super() }}
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
 {% endblock %}

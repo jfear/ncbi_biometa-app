@@ -24,7 +24,7 @@ def home():
 
 @main_bp.route("/<sample>", methods=["GET", "POST"])
 def sample(sample):
-    sample = Biometa.objects.get_or_404(biosample=sample)
+    sample = Biometa.objects.get_or_404(pk=sample)
     return render_template('sample.html', sample=sample)
 
 

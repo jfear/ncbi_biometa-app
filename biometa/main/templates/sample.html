@@ -102,7 +102,64 @@
 </div>
 
 <div class="row">
-  <h2>NIH Annotation</h2>
+  <div class="col-lg-12">
+      <h2>NIH Annotation</h2>
+  </div>
+</div>
+
+<div class="row">
+  {% if sample.magic %}
+  <div class="col-lg-6">
+      <h3>MAGIC</h3>
+        <dl class="dl-horizontal">
+          {% for attr in sample.magic %}
+          <dt>{{ attr.name }}:</dt>
+            <dd>{{ attr.value }}</dd>
+          {% endfor %}
+        </dl>
+  </div>
+  {% endif %}
+
+  {% if sample.mieg %}
+  <div class="col-lg-6">
+      <h3>Mieg</h3>
+        <dl class="dl-horizontal">
+          {% for attr in sample.mieg %}
+          <dt>{{ attr.name }}:</dt>
+            <dd>{{ attr.value }}</dd>
+          {% endfor %}
+        </dl>
+  </div>
+  {% endif %}
+
+</div>
+
+<div class="row">
+
+  {% if sample.nlm %}
+  <div class="col-lg-6">
+      <h3>NLM</h3>
+        <dl class="dl-horizontal">
+          {% for attr in sample.nlm %}
+          <dt>{{ attr.name }}:</dt>
+            <dd>{{ attr.value }}</dd>
+          {% endfor %}
+        </dl>
+  </div>
+  {% endif %}
+
+  {% if sample.chen %}
+  <div class="col-lg-6">
+      <h3>Chen</h3>
+        <dl class="dl-horizontal">
+          {% for attr in sample.chen %}
+          <dt>{{ attr.name }}:</dt>
+            <dd>{{ attr.value }}</dd>
+          {% endfor %}
+        </dl>
+  </div>
+  {% endif %}
+
 </div>
 
 {% if sample.papers|length > 0 %}

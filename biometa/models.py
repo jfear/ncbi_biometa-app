@@ -48,8 +48,9 @@ class Biometa(db.Document):
     sample_title = db.StringField()
     sample_attributes = db.ListField(db.EmbeddedDocumentField(Annotation), default=list)
 
-    jean = db.ListField(db.EmbeddedDocumentField(Annotation))
-    zhenxia = db.ListField(db.EmbeddedDocumentField(Annotation))
-    brian = db.ListField(db.EmbeddedDocumentField(Annotation))
-    justin = db.ListField(db.EmbeddedDocumentField(Annotation))
+    magic = db.ListField(db.EmbeddedDocumentField(Annotation))
+    mieg = db.ListField(db.EmbeddedDocumentField(Annotation))
+    chen = db.ListField(db.EmbeddedDocumentField(Annotation))
+    oliver = db.ListField(db.EmbeddedDocumentField(Annotation))
     nlm = db.ListField(db.EmbeddedDocumentField(Annotation))
+    fear = db.ListField(db.EmbeddedDocumentField(Annotation))
