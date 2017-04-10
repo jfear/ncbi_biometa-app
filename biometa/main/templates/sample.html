@@ -107,8 +107,8 @@
   </div>
 </div>
 
+{% if sample.magic %}
 <div class="row">
-  {% if sample.magic %}
   <div class="col-lg-6">
       <h3>MAGIC</h3>
         <dl class="dl-horizontal">
@@ -118,8 +118,10 @@
           {% endfor %}
         </dl>
   </div>
+</div>
   {% endif %}
 
+<div class="row">
   {% if sample.mieg %}
   <div class="col-lg-6">
       <h3>Mieg</h3>
@@ -131,10 +133,6 @@
         </dl>
   </div>
   {% endif %}
-
-</div>
-
-<div class="row">
 
   {% if sample.nlm %}
   <div class="col-lg-6">
@@ -148,11 +146,27 @@
   </div>
   {% endif %}
 
+</div>
+
+<div class="row">
+
   {% if sample.chen %}
   <div class="col-lg-6">
       <h3>Chen</h3>
         <dl class="dl-horizontal">
           {% for attr in sample.chen %}
+          <dt>{{ attr.name }}:</dt>
+            <dd>{{ attr.value }}</dd>
+          {% endfor %}
+        </dl>
+  </div>
+  {% endif %}
+
+  {% if sample.oliver %}
+  <div class="col-lg-6">
+      <h3>Oliver</h3>
+        <dl class="dl-horizontal">
+          {% for attr in sample.oliver %}
           <dt>{{ attr.name }}:</dt>
             <dd>{{ attr.value }}</dd>
           {% endfor %}
