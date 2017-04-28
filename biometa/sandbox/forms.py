@@ -15,3 +15,11 @@ class TestForm(Form):
 
 class TestFormTwo(Form):
     testList = FieldList(TextField('Name'), min_entries=2)
+
+
+class PerPageForm(Form):
+    per_pages = SelectField(
+        'Number Per Page',
+        choices=[(20, '20'), (40, '40'), (60, '60'), (100, '100')],
+    )
+    submit = SubmitField('Submit')

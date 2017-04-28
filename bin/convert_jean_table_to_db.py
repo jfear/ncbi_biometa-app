@@ -197,7 +197,7 @@ if __name__ == '__main__':
     # Connect to database
     logger.info('Connecting to database')
     client = MongoClient(host='localhost', port=27022)
-    db = client['test']
+    db = client['sra']
     biometa = db['biometa']
 
     # Add to database

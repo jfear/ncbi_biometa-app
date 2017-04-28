@@ -39,6 +39,7 @@ class Biometa(db.Document):
     bioproject = db.StringField()
     study_title = db.StringField()
     study_abstract = db.StringField()
+    description = db.StringField()
 
     contacts = db.ListField(db.EmbeddedDocumentField(Contacts), default=list)
     papers = db.ListField(db.EmbeddedDocumentField(Pubmed), default=list)

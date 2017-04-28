@@ -18,8 +18,7 @@ from biometa.models import Biometa
 
 logger = logging.getLogger()
 
-client = me.connect(db='sra2', host='localhost', port=27022)
-client2 = me.connect(db='test', host='localhost', port=27022, alias='test')
+client = me.connect(db='sra', host='localhost', port=27022)
 
 def dict_uniqify(d):
     return [dict(y) for y in set(tuple(x.items()) for x in d)]
@@ -60,6 +59,7 @@ def get_sample_attributes(ncbi):
 
     return dict_uniqify(attributes)
 
+
 def get_sample_title(ncbi):
     titles = []
     t1 = ncbi.sra.sample.title
@@ -81,6 +81,7 @@ def get_sample_title(ncbi):
         )
     return '|'.join(titles)
 
+
 def get_papers(ncbi):
     ids = []
     papers = []
@@ -91,6 +92,14 @@ def get_papers(ncbi):
                     papers.append(p)
                     ids.append(p['pubmed_id'])
     return papers
+
+
+def get_descirption(ncbi):
+    try:
+        for s in  ncbi.biosample:
+            return s.description
+    except:
+        pass
 
 
 def main():
@@ -108,6 +117,7 @@ def main():
                 'bioproject': ncbi.sra.study.BioProject,
                 'study_title': ncbi.sra.study.title,
                 'study_abstract': ncbi.sra.study.abstract,
+                'description': get_descirption(ncbi),
                 'sample_title': get_sample_title(ncbi),
                 'taxon_id': ncbi.sra.sample.taxon_id
             }
@@ -121,19 +131,18 @@ def main():
             papers = get_papers(ncbi)
             sample_attributes = get_sample_attributes(ncbi)
 
-            with switch_db(Biometa, 'test') as biometa:
-                try:
-                    biometa.objects(pk=biosample).update_one(
-                        upsert=True,
-                        biosample=biosample,
-                        add_to_set__contacts=contacts,
-                        add_to_set__papers=papers,
-                        add_to_set__experiments=experiment,
-                        add_to_set__sample_attributes=sample_attributes,
-                        **strings
-                    )
-                except ValidationError:
-                    print(ncbi.srx)
+            try:
+                Biometa.objects(pk=biosample).update_one(
+                    upsert=True,
+                    biosample=biosample,
+                    add_to_set__contacts=contacts,
+                    add_to_set__papers=papers,
+                    add_to_set__experiments=experiment,
+                    add_to_set__sample_attributes=sample_attributes,
+                    **strings
+                )
+            except ValidationError:
+                print(ncbi.srx)
 
 
 if __name__ == '__main__':

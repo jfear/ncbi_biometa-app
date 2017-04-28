@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Multi{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+  <h1>Test Multi</h1>
+</div>
+
+<div class="row">
+  <div class="col-lg-2">
+    {{ wtf.quick_form(form) }}
+    <br>
+  </div>
+  <div class="col-lg-4"></div>
+  <div class="col-lg-6">
+    {{ render_navigation(paginated_table, 'sandbox.multi', form.per_pages.data) }}
+  </div>
+</div>
+
+{% for sample in paginated_table.items %}
+
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>{{ sample.biosample }}</h1>
+    </div>
+  </div>
+
+  {% include 'sample2.html' %}
+
+  <hr>
+
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>$(document).ready(function(){$('[data-toggle="tooltip"]').tooltip();});</script>
+{% endblock %}
