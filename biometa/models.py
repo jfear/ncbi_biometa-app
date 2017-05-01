@@ -55,3 +55,4 @@ class Biometa(db.Document):
     oliver = db.ListField(db.EmbeddedDocumentField(Annotation))
     nlm = db.ListField(db.EmbeddedDocumentField(Annotation))
     fear = db.ListField(db.EmbeddedDocumentField(Annotation))
+    user_annotation = db.MapField(db.EmbeddedDocumentField(Annotation))
