@@ -3,11 +3,11 @@ from flask_bootstrap import Bootstrap
 from flask_login import current_user
 from flask_principal import identity_loaded, UserNeed, RoleNeed
 
-from biometa.models import db
-from biometa.extensions import login_manager, principal
-from biometa.main import main_bp
-from biometa.auth import auth_bp
-from biometa.sandbox import sandbox_bp
+from biometa_app.models import db
+from biometa_app.extensions import login_manager, principal
+from biometa_app.main import main_bp
+from biometa_app.auth import auth_bp
+from biometa_app.sandbox import sandbox_bp
 
 bootstrap = Bootstrap()
 

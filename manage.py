@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 from flask_script import Manager
-from biometa import create_app
-from biometa.models import db
+from biometa_app import create_app
+from biometa_app.models import db
 
-app = create_app('biometa.config.DevConfig')
+app = create_app('biometa_app.config.DevConfig')
 manager = Manager(app)
 
 
