@@ -13,6 +13,7 @@ class TestForm(Form):
         choices=[(20, '20'), (40, '40'), (60, '60'), (100, '100')],
     )
 
+
 class TestFormTwo(Form):
     testList = FieldList(TextField('Name'), min_entries=2)
 
