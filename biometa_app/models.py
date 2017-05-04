@@ -1,8 +1,10 @@
-from flask_mongoengine import MongoEngine
+from flask_mongoengine import MongoEngine, BaseQuerySet
+from flask_mongoengine.pagination import ListFieldPagination
 from flask_mongoengine.wtf import model_form
 from flask_login import UserMixin
+import types
 
-from sramongo.mongo_schema import Pubmed
+from biometalib.models import BiometaFields
 
 db = MongoEngine()
 
@@ -15,44 +17,13 @@ class User(db.Document, UserMixin):
         return '<User {}>'.format(self.username)
 
 
-class Contacts(db.EmbeddedDocument):
-    first_name = db.StringField()
-    last_name = db.StringField()
-    email = db.StringField()
+def patch_paginate_field(self, field_name, page, per_page, total=None):
+    """Paginate items within a list field."""
+    count = getattr(self, field_name + "_count", '')
+    total = total or count or len(getattr(self, field_name))
+    return ListFieldPagination(self.__class__.objects, self.pk, field_name, page, per_page, total=total)
 
 
-class Experiment(db.EmbeddedDocument):
-    srx = db.StringField()
-    runs = db.ListField(db.StringField(), default=list)
+class Biometa(db.Document, BiometaFields):
+    pass
 
-
-class Annotation(db.EmbeddedDocument):
-    name = db.StringField()
-    value = db.StringField()
-
-
-class Biometa(db.Document):
-    biosample = db.StringField(primary_key=True, required=True)
-    srs = db.StringField()
-    gsm = db.StringField()
-    srp = db.StringField()
-    bioproject = db.StringField()
-    study_title = db.StringField()
-    study_abstract = db.StringField()
-    description = db.StringField()
-
-    contacts = db.ListField(db.EmbeddedDocumentField(Contacts), default=list)
-    papers = db.ListField(db.EmbeddedDocumentField(Pubmed), default=list)
-    experiments = db.ListField(db.EmbeddedDocumentField(Experiment), default=list)
-
-    taxon_id = db.StringField()
-    sample_title = db.StringField()
-    sample_attributes = db.ListField(db.EmbeddedDocumentField(Annotation), default=list)
-
-    magic = db.ListField(db.EmbeddedDocumentField(Annotation))
-    mieg = db.ListField(db.EmbeddedDocumentField(Annotation))
-    chen = db.ListField(db.EmbeddedDocumentField(Annotation))
-    oliver = db.ListField(db.EmbeddedDocumentField(Annotation))
-    nlm = db.ListField(db.EmbeddedDocumentField(Annotation))
-    fear = db.ListField(db.EmbeddedDocumentField(Annotation))
-    user_annotation = db.MapField(db.EmbeddedDocumentField(Annotation))
