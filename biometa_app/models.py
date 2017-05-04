@@ -17,13 +17,6 @@ class User(db.Document, UserMixin):
         return '<User {}>'.format(self.username)
 
 
-def patch_paginate_field(self, field_name, page, per_page, total=None):
-    """Paginate items within a list field."""
-    count = getattr(self, field_name + "_count", '')
-    total = total or count or len(getattr(self, field_name))
-    return ListFieldPagination(self.__class__.objects, self.pk, field_name, page, per_page, total=total)
-
-
 class Biometa(db.Document, BiometaFields):
     pass
 
