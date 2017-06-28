@@ -16,8 +16,9 @@ class PerPageForm(FlaskForm):
 
 
 class QuerySampleAttribute(FlaskForm):
-    SRR = StringField()
+    SRP = StringField()
     SRX = StringField()
+    SRR = StringField()
     Attributes = StringField()
     search = SubmitField('Search')
 

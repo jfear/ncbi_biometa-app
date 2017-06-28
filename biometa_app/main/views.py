@@ -16,6 +16,7 @@ def home():
         'per_pages': int(request.args.get('per_pages', 20)),
         'srr': request.args.get('srr', ''),
         'srx': request.args.get('srx', ''),
+        'srp': request.args.get('srp', ''),
         'query': request.args.get('query', ''),
     }
 
@@ -24,6 +25,7 @@ def home():
     if (request.method == 'POST') and query_form.search.data and query_form.validate_on_submit():
         payload['srr'] = query_form['SRR'].data
         payload['srx'] = query_form['SRX'].data
+        payload['srp'] = query_form['SRP'].data
         payload['query'] = query_form['Attributes'].data
         return redirect(url_for("main.home", **payload))
 
@@ -31,6 +33,8 @@ def home():
         cursor = Biometa.objects(experiments__runs__icontains=payload['srr'])
     elif payload['srx']:
         cursor = Biometa.objects(experiments__srx=payload['srx'])
+    elif payload['srp']:
+        cursor = Biometa.objects(srp=payload['srp'])
     elif payload['query']:
         cursor = Biometa.objects(sample_attributes__value__icontains=payload['query'])
     else:
