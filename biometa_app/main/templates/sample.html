@@ -16,7 +16,10 @@
 
       {% if sample.srp %}
         <dt>SRA Study:</dt>
-        <dd><a href="https://trace.ncbi.nlm.nih.gov/Traces/sra/?study={{ sample.srp }}">{{ sample.srp }}</a></dd>
+        <dd>
+          <a href="https://trace.ncbi.nlm.nih.gov/Traces/sra/?study={{ sample.srp }}">{{ sample.srp }}</a>
+          <a href="{{ url_for('main.home', srp=sample.srp) }}">[Get List]</a>
+        </dd>
       {% endif %}
 
       {% if sample.contacts|length > 0 %}
