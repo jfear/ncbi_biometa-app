@@ -201,9 +201,21 @@
   </div>
 {% endif %}
 
+{% if current_user.is_authenticated %}
+<div class="pre-scrollable">
+  {{ wtf.quick_form(form) }}
+<div>
+{% endif %}
+
 {% endblock %}
 
 {% block scripts %}
   {{ super() }}
   <script>$(document).ready(function(){$('[data-toggle="tooltip"]').tooltip();});</script>
+  <style>
+  .scrolly {
+    height: 40vh;
+    overflow-y: scroll;
+  }
+  </style>
 {% endblock %}
