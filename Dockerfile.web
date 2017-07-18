@@ -1,0 +1,9 @@
+FROM jfear/centos7-miniconda3:py3.5
+
+MAINTAINER Justin Fear <justin.m.fear@gmail.com>
+
+COPY requirements.txt /tmp/requirements.txt
+
+WORKDIR /app
+
+RUN conda install -y --file /tmp/requirements.txt && conda install -y gunicorn && conda clean --all -y

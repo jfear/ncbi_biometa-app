@@ -1,0 +1,43 @@
+version: '2'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    restart: always
+    expose:
+      - "8000"
+    links:
+      - db
+    volumes:
+      - .:/app
+    env_file: .env
+    command: gunicorn -w 2 manage:app -b :8000 --name app
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - /www/static
+    volumes_from:
+      - web
+    links:
+      - web:web
+
+  data:
+    image: mongo
+    volumes:
+      - ./db:/data/db
+    command: "true"
+
+  db:
+    image: mongo
+    restart: always
+    volumes_from:
+      - data
+    ports:
+      - "27017:27017"
