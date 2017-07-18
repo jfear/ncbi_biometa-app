@@ -6,8 +6,8 @@ class Config(object):
 
 class ProdConfig(Config):
     SECRET_KEY = os.getenv('SECRET_KEY')
-    MONGODB_HOST = os.getenv('DB_HOST')
-    MONGODB_PORT = os.getenv('DB_PORT')
+    MONGODB_HOST = os.getenv('MONGODB_HOST')
+    MONGODB_PORT = int(os.getenv('MONGODB_PORT'))
     DEBUG = False
 
 
