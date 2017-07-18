@@ -13,6 +13,6 @@ class ProdConfig(Config):
 
 class DevConfig(Config):
     SECRET_KEY = 'XMLZODSHE8N6NFOZDPZA2HULWSIYJU45K6N4ZO9M'
-    MONGODB_HOST = 'db'
+    MONGODB_HOST = 'localhost'
     MONGO_PORT = 27017
     DEBUG = True
