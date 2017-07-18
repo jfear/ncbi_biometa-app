@@ -1,6 +1,6 @@
 from flask_login import LoginManager
 from flask_principal import Principal, Permission, RoleNeed
-from biometa_app.models import User
+from app.models import User
 from bson import ObjectId
 
 login_manager = LoginManager()

@@ -3,11 +3,10 @@ from flask_bootstrap import Bootstrap
 from flask_login import current_user
 from flask_principal import identity_loaded, UserNeed, RoleNeed
 
-from biometa_app.models import db
-from biometa_app.extensions import login_manager, principal
-from biometa_app.main import main_bp
-from biometa_app.auth import auth_bp
-from biometa_app.sandbox import sandbox_bp
+from app.models import db
+from app.extensions import login_manager, principal
+from app.main import main_bp
+from app.auth import auth_bp
 
 bootstrap = Bootstrap()
 
@@ -22,7 +21,6 @@ def create_app(config_object):
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
-    app.register_blueprint(sandbox_bp)
 
 
     @identity_loaded.connect_via(app)
