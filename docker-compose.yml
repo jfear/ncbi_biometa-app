@@ -12,7 +12,7 @@ services:
     volumes:
       - .:/app
     env_file: .env
-    command: gunicorn -w 2 manage:app -b :8000 --name app
+    command: gunicorn -w 2 wsgi:app -b :8000 --name app
 
   nginx:
     build:
