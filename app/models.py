@@ -1,7 +1,7 @@
 from flask_mongoengine import MongoEngine, BaseQuerySet
 from flask_mongoengine.pagination import ListFieldPagination
 from flask_mongoengine.wtf import model_form
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 import types
 
 from biometalib.models import BiometaFields
@@ -15,6 +15,11 @@ class User(db.Document, UserMixin):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+
+class Anonymous(AnonymousUserMixin):
+    def __init__(self):
+        self.username = 'Guest'
 
 
 class Biometa(db.Document, BiometaFields):

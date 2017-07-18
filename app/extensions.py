@@ -1,9 +1,10 @@
 from flask_login import LoginManager
 from flask_principal import Principal, Permission, RoleNeed
-from app.models import User
+from app.models import User, Anonymous
 from bson import ObjectId
 
 login_manager = LoginManager()
+login_manager.anonymous_user = Anonymous
 login_manager.login_view = "auth.login"
 
 principal = Principal()
