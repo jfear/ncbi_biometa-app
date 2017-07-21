@@ -1,9 +1,11 @@
-from flask import render_template, redirect, request, flash, url_for, current_app, jsonify
+import json
+from flask import render_template, redirect, request, flash, url_for, current_app
 from flask_login import current_user
 from . import main_bp
 from .forms import PerPageForm, QuerySampleAttribute, AttributeForm
 from ..models import Biometa
 from biometalib.models import CleanedAttributes
+from biometalib.models import Biometa as Bm
 
 
 @main_bp.route("/", methods=["GET", "POST"])
@@ -88,3 +90,25 @@ def sample(sample):
     form.process()
 
     return render_template('sample.html', sample=sample_data, form=form)
+
+@main_bp.route("/dt", methods=["GET", "POST"])
+def dt():
+    """Playing with datatables."""
+    return render_template('index2.html')
+
+@main_bp.route("/_dt", methods=["GET", "POST"])
+def get_server_data():
+    """Playing with datatables."""
+    pipeline = [{
+            '$project': {
+                '_id': 0,
+                'BioSample': '$_id',
+                'BioProject': '$bioproject',
+                'SRA Study': '$srs',
+                'SRA Project': '$srp',
+            },
+        },
+        ]
+
+    return json.dumps({'data': list(Bm.objects.aggregate(*pipeline))})
+
