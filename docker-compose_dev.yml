@@ -1,0 +1,27 @@
+version: '2'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    restart: always
+    ports:
+      - "80:5000"
+    links:
+      - db
+    volumes:
+      - .:/app
+    env_file: .env
+    command: python manage.py runserver
+  data:
+    image: mongo
+    volumes:
+      - ./db:/data/db
+    command: "true"
+  db:
+    image: mongo
+    restart: always
+    volumes_from:
+      - data
+    ports:
+      - "27017:27017"
