@@ -4,12 +4,6 @@ from flask_script import Manager, Server
 from app import create_app
 from app.models import db
 
-# set up environmental variables
-# with open(".env", 'r') as fh:
-#     for pair in fh:
-#         key, value = pair.strip().split('=')
-#         os.environ[key] = value
-
 app = create_app('app.config.DevConfig')
 manager = Manager(app)
 manager.add_command("runserver", Server(host="0.0.0.0", port=80))
