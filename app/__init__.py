@@ -7,6 +7,7 @@ from app.models import db
 from app.extensions import login_manager, principal
 from app.main import main_bp
 from app.auth import auth_bp
+from app.attribute import attribute_bp
 
 bootstrap = Bootstrap()
 
@@ -21,6 +22,7 @@ def create_app(config_object):
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(attribute_bp)
 
 
     @identity_loaded.connect_via(app)

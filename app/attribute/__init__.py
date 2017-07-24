@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-main_bp = Blueprint(
+attribute_bp = Blueprint(
     'attribute',
     __name__,
     template_folder='./templates'
