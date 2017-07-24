@@ -7,4 +7,4 @@ class AttributeValue(db.EmbeddedDocument):
     synonyms = db.ListField(default=list)
 
 class AttributeSelector(db.Document):
-    data = db.ListField(db.EmbededDocumentField(AttributeValue), default=list)
+    data = db.ListField(db.EmbeddedDocumentField(AttributeValue), default=list)
