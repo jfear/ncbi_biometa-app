@@ -3,7 +3,7 @@ from wtforms import SelectField, SubmitField, IntegerField, FloatField, BooleanF
 from wtforms import validators
 
 class AttributeSelectorForm(FlaskForm):
-    KeepButton = SubmitField('Keep', description="Click to keep current attribute type.")
-    IgnoreButton = SubmitField('Ignore', description="Click to ignore current attribute type.")
-    RenameButton = SubmitField('Rename', description="Click to Rename current attribute type.")
-    Rename= StringField('Rename To', descritpion="Rename the current attribute to this value.")
+    KeepButton = SubmitField('Keep')
+    IgnoreButton = SubmitField('Ignore')
+    Rename= StringField('Rename To', description="Rename the current attribute to this value.")
+    RenameButton = SubmitField('Rename')
