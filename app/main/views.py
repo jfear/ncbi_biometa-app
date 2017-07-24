@@ -106,6 +106,13 @@ def get_server_data():
                 'BioProject': '$bioproject',
                 'SRA Study': '$srs',
                 'SRA Project': '$srp',
+                'SRA Experiments': {
+                    '$reduce': {
+                        'input': '$experiments.srx',
+                        'initialValue': '',
+                        'in': { '$concat': ['$$value', '|', '$$this'] }
+                    }
+                },
             },
         },
         ]
