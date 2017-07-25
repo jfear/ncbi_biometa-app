@@ -84,6 +84,17 @@ def add_attr(key, value):
     return
 
 
+def get_index(name, docs, field='name'):
+    """Get index from list of dicts.
+
+    Given a list of dicts, figure out the index that contains the value.
+    """
+    for i, doc in enumerate(docs):
+        if doc[field] == name:
+            return i
+    return None
+
+
 @attribute_bp.route("/attribute", methods=["GET", "POST"])
 @login_required
 def attribute_selector():
@@ -119,16 +130,6 @@ def attribute_selector():
 
     return render_template('attribute.html', form=form, current_user=current_user, attribute=session['currAttr'])
 
-
-def get_index(name, docs, field='name'):
-    """Get index from list of dicts.
-
-    Given a list of dicts, figure out the index that contains the value.
-    """
-    for i, doc in enumerate(docs):
-        if doc[field] == name:
-            return i
-    return None
 
 @attribute_bp.route("/attributeMap", methods=["GET",])
 def attribute_map():
