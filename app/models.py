@@ -24,4 +24,3 @@ class Anonymous(AnonymousUserMixin):
 
 class Biometa(db.Document, BiometaFields):
     pass
-
