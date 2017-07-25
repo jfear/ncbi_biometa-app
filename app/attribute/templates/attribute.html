@@ -4,6 +4,8 @@
 {% block page_content %}
 <div class="page-header">
   <h1>{{ attribute }}</h1>
+  <div>Number BioProjects: {{ num_projects }}</div>
+  <div>Number BioSamples: {{ num_samples }}</div>
 </div>
 
 <div class="row">
@@ -11,4 +13,22 @@
     {{ wtf.quick_form(form) }}
     <br>
   </div>
+
+<h2>Current Values</h2>
+<div class="row">
+  {% for ex in examples %}
+    <div class="col col-md-4">
+    {{ ex }}
+    </div>
+  {% endfor %}
+</div>
+
+<h2>My Attribute Types</h2>
+<div class="row">
+  {% for attr in user_attr %}
+    <div class="col col-md-4">
+    {{ attr }}
+    </div>
+  {% endfor %}
+</div>
 {% endblock %}
