@@ -6,68 +6,35 @@
   <h1>SRA Biometa</h1>
 </div>
 
-<div class="row">
-  <div class="col-lg-2">
-    {{ wtf.quick_form(query) }}
-    <br>
-  </div>
-  <div class="col-lg-2">
-    {{ wtf.quick_form(form) }}
-    <br>
-  </div>
-  <div class="col-lg-4"></div>
-  <div class="col-lg-6">
-    {{ render_navigation(paginated_table, 'main.home', payload) }}
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-lg-12">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>BioSample</th>
-          <th>Experiments</th>
-          <th>Contact</th>
-          <th>Checked</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for row in paginated_table.items %}
-        <tr>
-          <td>
-            <a href="{{ url_for('main.sample', sample=row.biosample) }}">{{ row.biosample }}</a>
-          </td>
-          <td>
-          {% for exp in row.experiments %}
-            {{ exp.srx }}
-            {% if not loop.last %}|{% endif %}
-          {%- endfor %}
-          </td>
-          <td>
-            {% if row.contacts|length > 0 %}
-              {{ row.contacts[0].first_name }}
-              {{ row.contacts[0].last_name }}
-              (<a href="mailto:{{ row.contacts[0].email }}">{{ row.contacts[0].email }}</a>)
-            {% endif %}
-          </td>
-          {%if current_user.is_authenticated %}
-            <td>
-              {% if row.user_annotation[current_user.username] %}
-                {% if row.user_annotation[current_user.username].checked == True %}
-                Yes
-                {% endif %}
-              {% endif %}
-
-            </td>
-          {% endif %}
-        </tr>
-      {% endfor %}
-
-      </tbody>
-    </table>
-    <ul>
-    </ul>
-  </div>
+<div class="container">
+  <table class="table table-striped table-bordered" width="100%" id="sraTable">
+    <thead>
+      <tr>
+        {% for col in columns %}
+        <th>{{ col }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+  </table>
 </div>
 {% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+
+  <script>
+    $('#sraTable').dataTable({
+      "ajax": "{{ url_for('main.get_server_data') }}",
+      "oSearch": {"sSearch": "{{ osearch }}"},
+      "columns": [
+        {% for col in columns %}
+          { "data": "{{ col }}" },
+        {% endfor %}
+      ]
+    });
+  </script>
+
+{% endblock %}
+
