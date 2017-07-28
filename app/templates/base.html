@@ -6,51 +6,6 @@
   {{ dt.strftime('%Y-%m-%d') }}
 {% endmacro %}
 
-{# Macro for creating navigation links #}
-{% macro render_navigation(pagination, endpoint, payload) %}
-  <nav aria-label="Page navigation">
-    {% set currPage = request.args.get('page', 1)|int %}
-    <ul class="pagination pagination-sm">
-      {% if currPage != 1 %}
-        <li><a href="{{ url_for(endpoint, page=1, **payload) }}">&laquo;&laquo;</a></li>
-      {% else %}
-        <li class="disabled"><a href="#">&laquo;&laquo;</a></li>
-      {% endif %}
-
-      {% if currPage > 5 %}
-        <li><a href="{{ url_for(endpoint, page=currPage - 5, **payload) }}">&laquo;</a></li>
-      {% else %}
-        <li class="disabled"><a href="#">&laquo;</a></li>
-      {% endif %}
-
-      {% for page in pagination.iter_pages() %}
-        {% if page %}
-          {% if page != pagination.page %}
-            <li><a href="{{ url_for(endpoint, page=page, **payload) }}">{{ page }}</a></li>
-          {% else %}
-            <li class="active"><a href="#">{{ page }}</a></li>
-          {% endif %}
-        {% else %}
-          <li class="disabled"><span class=ellipsis>…</span></li>
-        {% endif %}
-      {% endfor %}
-
-      {% if currPage < (pagination.pages - 4) %}
-        <li><a href="{{ url_for(endpoint, page=currPage + 5, **payload) }}">&raquo;</a></li>
-      {% else %}
-        <li class="disabled"><a href="#">&raquo;</a></li>
-      {% endif %}
-
-      {% if currPage != pagination.pages %}
-        <li><a href="{{ url_for(endpoint, page=pagination.pages, **payload) }}">&raquo;&raquo;</a></li>
-      {% else %}
-        <li class="disabled"><a href="#">&raquo;&raquo;</a></li>
-      {% endif %}
-
-    </ul>
-  </nav>
-{% endmacro %}
-
 {% block head %}
   {{ super() }}
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
