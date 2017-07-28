@@ -11,7 +11,7 @@ from ruamel import yaml
 from biometalib.models import Biometa
 
 from . import attribute_bp
-from .forms import AttributeSelectorForm
+from .forms import AttributeSelectorForm, AttributePager
 from .models import AttributeSelector
 
 
@@ -98,6 +98,17 @@ def add_attr(key, value):
     # Attribute list for the current user
     userAttrs = userDoc.attributes
 
+    # Remove value if already a top level attribute type.
+    userAttrs = [x for x in userAttrs if x.name != value]
+
+    # Remove value if already a synonym.
+    _userAttrs = []
+    for _attr in userAttrs:
+        _attr.synonyms = [x for x in _attr.synonyms if x != value]
+        _userAttrs.append(_attr)
+
+    userAttrs = _userAttrs
+
     # Iterate over user attributes and append value if key matches attribute name
     for attr in userAttrs:
         if attr.name == key:
@@ -183,41 +194,46 @@ def attribute_selector():
     input about how to handle the type.
     """
     form = AttributeSelectorForm()
+    pager = AttributePager()
 
-    if request.method == 'GET':
-        # Get a list of attribute types
-        attrList = filter_attribute_list()
-
-        # Get current attribute or send to summary page
-        try:
-            session['currAttr'] = attrList.pop()
-        except IndexError:
-            return redirect(url_for('.attribute_map'))
+    session['attrIndex'] = session.get('attrIndex') or 0
+    session['attrList'] = session.get('attrList') or get_all_attrs()
+    _currAttr = session['attrList'][session['attrIndex']]
 
     if request.method == 'POST':
-        currAttr = session['currAttr']
         if form.KeepButton.data:
             # Add attribute to the set
-            add_attr(currAttr, currAttr)
+            add_attr(_currAttr, _currAttr)
         elif form.IgnoreButton.data:
             # Add the attribute to the ignore
-            add_attr('Ignore', currAttr)
+            add_attr('Ignore', _currAttr)
         elif form.RenameButton.data and form.Rename.data and form.validate_on_submit():
             # Add the attribute to the renamed value
-            add_attr(form.Rename.data, currAttr)
+            add_attr(form.Rename.data, _currAttr)
+
+        if pager.Previous.data:
+            # Decrement the index
+            session['attrIndex'] = session['attrIndex'] - 1
+            return redirect(url_for('.attribute_selector'))
+        elif pager.Next.data:
+            # Increment the index
+            session['attrIndex'] = session['attrIndex'] + 1
+            return redirect(url_for('.attribute_selector'))
+
+        # Increment the index
+        session['attrIndex'] = session['attrIndex'] + 1
 
         return redirect(url_for('.attribute_selector'))
 
-
     # Get information about the current attribute
-    num_samples, num_projects, examples = get_examples(session['currAttr'])
+    num_samples, num_projects, examples = get_examples(_currAttr)
 
     # Get information about the current user's list of attribute types
     user_attr = [x['name'] for x in get_user().attributes]
 
     return render_template('attribute.html', form=form, current_user=current_user,
-                           attribute=session['currAttr'], num_samples=num_samples,
-                           num_projects=num_projects, examples=examples, user_attr=user_attr)
+                           attribute=_currAttr, current_index=session['attrIndex'], num_samples=num_samples,
+                           num_projects=num_projects, examples=examples, user_attr=user_attr, pager=pager)
 
 
 @attribute_bp.route("/attributeMap", methods=["GET",])
