@@ -22,7 +22,7 @@ columnMapping = OrderedDict([
 
 
 @main_bp.route("/", methods=["GET"])
-@main_bp.route("/<osearch>")
+@main_bp.route("/q?=<osearch>")
 def home(osearch=''):
     """Playing with datatables."""
     return render_template('index.html', columns=columnMapping.keys(), osearch=osearch)
