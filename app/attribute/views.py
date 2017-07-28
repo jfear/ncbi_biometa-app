@@ -1,6 +1,7 @@
 import pkg_resources
 import json
 import time
+from collections import Counter
 
 from flask import render_template, session, redirect, request, flash, url_for, current_app, jsonify
 from flask_login import current_user, login_required
@@ -165,7 +166,10 @@ def get_examples(currAttr):
         }
     ])
 
-    return num_samples, num_projects, list(set([x['_id'] for x in values]))
+    # Count the number of times each value is present
+    examples = Counter([x['_id'] for x in values])
+
+    return num_samples, num_projects, sorted(examples.items(), key=lambda x: x[0])
 
 
 @attribute_bp.route("/attribute", methods=["GET", "POST"])
