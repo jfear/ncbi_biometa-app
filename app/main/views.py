@@ -22,7 +22,7 @@ columnMapping = OrderedDict([
 
 
 @main_bp.route("/", methods=["GET"])
-@main_bp.route("/q?=<osearch>")
+@main_bp.route("/search/<osearch>", methods=["GET"])
 def home(osearch=''):
     """Playing with datatables."""
     return render_template('index.html', columns=columnMapping.keys(), osearch=osearch)
@@ -37,7 +37,8 @@ def sample(sample):
         _data = {k: v for k, v in form.data.items() if (v != '') & (k != 'csrf_token') & (k != 'submit')}
         Biometa.objects(pk=sample).update_one(set__user_annotation={current_user.username: CleanedAttributes(**_data)})
         flash("Updated record.", "success")
-        return render_template('sample.html', sample=sample_data, form=form)
+        return render_template('sample.html', sample=sample, sample_data=sample_data, form=form)
+
     try:
         _data = sample_data.user_annotation[current_user.username].to_mongo().to_dict()
     except KeyError:
@@ -57,7 +58,7 @@ def sample(sample):
         form[key].default = value
     form.process()
 
-    return render_template('sample.html', sample=sample_data, form=form)
+    return render_template('sample.html', sample=sample, sample_data=sample_data, form=form)
 
 
 def join_list(ll):

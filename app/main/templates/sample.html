@@ -9,22 +9,22 @@
   <h2>Project Information</h2>
   <div class="col-lg-6">
     <dl class="dl-horizontal">
-      {% if sample.bioproject %}
+      {% if sample_data.bioproject %}
         <dt>BioProject:</dt>
-        <dd><a href="https://www.ncbi.nlm.nih.gov/bioproject/{{ sample.bioproject }}">{{ sample.bioproject }}</a></dd>
+        <dd><a href="https://www.ncbi.nlm.nih.gov/bioproject/{{ sample_data.bioproject }}">{{ sample_data.bioproject }}</a></dd>
       {% endif %}
 
-      {% if sample.srp %}
+      {% if sample_data.srp %}
         <dt>SRA Study:</dt>
         <dd>
-          <a href="https://trace.ncbi.nlm.nih.gov/Traces/sra/?study={{ sample.srp }}">{{ sample.srp }}</a>
-          <a href="{{ url_for('main.home', srp=sample.srp) }}">[Get List]</a>
+          <a href="https://trace.ncbi.nlm.nih.gov/Traces/sra/?study={{ sample_data.srp }}">{{ sample_data.srp }}</a>
+          <a href="{{ url_for('main.home', osearch=sample_data.srp) }}">[Get List]</a>
         </dd>
       {% endif %}
 
-      {% if sample.contacts|length > 0 %}
+      {% if sample_data.contacts|length > 0 %}
         <dt>Contact:</dt>
-        {% for contact in sample.contacts %}
+        {% for contact in sample_data.contacts %}
           <dd>
             {{ contact.first_name }}
             {{ contact.last_name }}
@@ -37,9 +37,9 @@
 
   <div class="col-lg-6">
     <dl class="dl-horizontal">
-      {% if sample.abstract %}
+      {% if sample_data.abstract %}
         <dt>Abstract:</dt>
-        <dd> {{ sample.abstract }} </dd>
+        <dd> {{ sample_data.abstract }} </dd>
       {% endif %}
     </dl>
   </div>
@@ -51,34 +51,34 @@
     <dl class="dl-horizontal">
       <dt>
       <dt>BioSample:</dt>
-      <dd><a href="https://www.ncbi.nlm.nih.gov/biosample/{{ sample.biosample }}">{{ sample.biosample }}</a></dd>
+      <dd><a href="https://www.ncbi.nlm.nih.gov/biosample/{{ sample_data.biosample }}">{{ sample_data.biosample }}</a></dd>
 
-      {% if sample.gsm %}
+      {% if sample_data.gsm %}
         <dt>GEO Sample:</dt>
-        <dd><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc={{ sample.gsm }}">{{ sample.gsm }}</a></dd>
+        <dd><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc={{ sample_data.gsm }}">{{ sample_data.gsm }}</a></dd>
       {% endif %}
 
-      {% if sample.srs %}
+      {% if sample_data.srs %}
         <dt>SRA Sample:</dt>
-        <dd><a href="https://www.ncbi.nlm.nih.gov/sra/?term={{ sample.srs }}">{{ sample.srs }}</a></dd>
+        <dd><a href="https://www.ncbi.nlm.nih.gov/sra/?term={{ sample_data.srs }}">{{ sample_data.srs }}</a></dd>
       {% endif %}
     </dl>
 
     <h3>Author Annotation</h3>
 
     <dl class="dl-horizontal">
-      {% if sample.taxon_id %}
+      {% if sample_data.taxon_id %}
         <dt>Taxon ID:</dt>
-        <dd>{{ sample.taxon_id }}</dd>
+        <dd>{{ sample_data.taxon_id }}</dd>
       {% endif %}
 
-      {% if sample.sample_title %}
+      {% if sample_data.sample_title %}
         <dt>Sample Title</dt>
-        <dd>{{ sample.sample_title }}</dd>
+        <dd>{{ sample_data.sample_title }}</dd>
       {% endif %}
 
-      {% if sample.sample_attributes|length > 0 %}
-        {% for attribute in sample.sample_attributes %}
+      {% if sample_data.sample_attributes|length > 0 %}
+        {% for attribute in sample_data.sample_attributes %}
         <dt>{{ attribute.name }}:</dt>
         <dd>{{ attribute.value }}</dd>
         {% endfor %}
@@ -89,7 +89,7 @@
   <div class="col-lg-6">
     <dl class="dl-horizontal">
       <dt>Experiments:</dt>
-      {% for exp in sample.experiments %}
+      {% for exp in sample_data.experiments %}
         <dd>
             <a href="https://www.ncbi.nlm.nih.gov/sra/{{ exp.srx }}[accn]">{{ exp.srx }}</a>
             {% if exp.runs|length > 0 %}
@@ -104,19 +104,19 @@
   </div>
 </div>
 
-{% if sample.magic or sample.mieg or sample.nlm or sample.chen or sample.oliver %}
+{% if sample_data.magic or sample_data.mieg or sample_data.nlm or sample_data.chen or sample_data.oliver %}
   <div class="row">
     <div class="col-lg-12">
         <h2>NIH Annotation</h2>
     </div>
   </div>
 
-  {% if sample.magic %}
+  {% if sample_data.magic %}
   <div class="row">
     <div class="col-lg-12">
         <h3>MAGIC</h3>
           <dl class="dl-horizontal">
-            {% for attr in sample.magic %}
+            {% for attr in sample_data.magic %}
             <dt>{{ attr.name }}:</dt>
               <dd>{{ attr.value }}</dd>
             {% endfor %}
@@ -126,11 +126,11 @@
     {% endif %}
 
   <div class="row">
-    {% if sample.mieg %}
+    {% if sample_data.mieg %}
     <div class="col-lg-6">
         <h3>Mieg</h3>
           <dl class="dl-horizontal">
-            {% for attr in sample.mieg %}
+            {% for attr in sample_data.mieg %}
             <dt>{{ attr.name }}:</dt>
               <dd>{{ attr.value }}</dd>
             {% endfor %}
@@ -138,11 +138,11 @@
     </div>
     {% endif %}
 
-    {% if sample.nlm %}
+    {% if sample_data.nlm %}
     <div class="col-lg-6">
         <h3>NLM</h3>
           <dl class="dl-horizontal">
-            {% for attr in sample.nlm %}
+            {% for attr in sample_data.nlm %}
             <dt>{{ attr.name }}:</dt>
               <dd>{{ attr.value }}</dd>
             {% endfor %}
@@ -154,11 +154,11 @@
 
   <div class="row">
 
-    {% if sample.chen %}
+    {% if sample_data.chen %}
     <div class="col-lg-6">
         <h3>Chen</h3>
           <dl class="dl-horizontal">
-            {% for attr in sample.chen %}
+            {% for attr in sample_data.chen %}
             <dt>{{ attr.name }}:</dt>
               <dd>{{ attr.value }}</dd>
             {% endfor %}
@@ -166,11 +166,11 @@
     </div>
     {% endif %}
 
-    {% if sample.oliver %}
+    {% if sample_data.oliver %}
     <div class="col-lg-6">
         <h3>Oliver</h3>
           <dl class="dl-horizontal">
-            {% for attr in sample.oliver %}
+            {% for attr in sample_data.oliver %}
             <dt>{{ attr.name }}:</dt>
               <dd>{{ attr.value }}</dd>
             {% endfor %}
@@ -181,12 +181,12 @@
   </div>
 {% endif %}
 
-{% if sample.papers|length > 0 %}
+{% if sample_data.papers|length > 0 %}
   <div class="row">
     <h2>Papers</h2>
     <div class="col-lg-12">
       <dl class="dl-horizontal">
-        {% for paper in sample.papers %}
+        {% for paper in sample_data.papers %}
           <dt><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ paper.pubmed_id }}">{{ paper.pubmed_id }}</a></dt>
           <dd>
             <p>
@@ -205,9 +205,32 @@
 {% endif %}
 
 {% if current_user.is_authenticated %}
-<div class="pre-scrollable">
-  {{ wtf.quick_form(form) }}
-<div>
+  <form action="{{ url_for('.sample', sample=sample) }}" method="post">
+    {{ form.hidden_tag() }}
+    {{ wtf.form_errors(form, hiddens="only") }}
+    <table class="table table-striped">
+      {% for field in form if field.widget.input_type != 'hidden' %}
+          <tr>
+            {% if field.widget.input_type == 'submit' %}
+              <td>{{ field(class="btn btn-primary") }}</td>
+              <td></td>
+            {% else %}
+              <td>
+                {{ field.label(**{'data-toggle': "tooltip", 'title': field.description }) }}:
+              </td>
+              <td>
+                {% if field.errors %}
+                    {% for e in field.errors %}
+                        <p class="form-text">{{ e }}</p>
+                    {% endfor %}
+                {% endif %}
+                {{ field(size=80) }}
+              </td>
+            {% endif %}
+          </tr>
+      {% endfor %}
+    </table>
+  </form>
 {% endif %}
 
 {% endblock %}
