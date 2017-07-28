@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, session
 from flask_bootstrap import Bootstrap
 from flask_login import current_user
 from flask_principal import identity_loaded, UserNeed, RoleNeed
+from flask_mongoengine import MongoEngineSessionInterface
 
 from app.models import db
 from app.extensions import login_manager, principal
@@ -23,6 +24,8 @@ def create_app(config_object):
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(attribute_bp)
+
+    app.session_interface = MongoEngineSessionInterface(db)
 
 
     @identity_loaded.connect_via(app)
