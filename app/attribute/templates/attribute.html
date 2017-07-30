@@ -8,13 +8,27 @@
   <div>Number BioSamples: {{ num_samples }}</div>
 </div>
 
-<div class="row">
-  <div class="col-lg-2">
-    {{ wtf.quick_form(form) }}
-    <br>
-  </div>
-</div>
+<div class="container">
+<form action="{{ url_for('.attribute_selector') }}" method="post">
+  {{ form.hidden_tag() }}
+  {{ wtf.form_errors(pager, hiddens="only") }}
+  <table class="table-condensed" width="100%" id="form">
+    <tr style="border-top: none !important">
+        <td> {{ form.KeepButton(class="btn btn-default") }}</td>
+        <td> {{ form.IgnoreButton(class="btn btn-default") }}</td>
+    </tr>
+    <tr>
+        <td> {{ form.RenameButton(class="btn btn-default") }}</td>
+        <td> {{ form.Rename(size=80) }}</td>
+    </tr>
+    <tr>
+        <td> {{ form.SearchButton(class="btn btn-default") }}</td>
+        <td> {{ form.Search(size=80) }}</td>
+    </tr>
+  </table>
+</form>
 
+<hr>
 <form action="{{ url_for('.attribute_selector') }}" method="post">
     {{ form.hidden_tag() }}
     {{ wtf.form_errors(pager, hiddens="only") }}
@@ -23,6 +37,7 @@
         <div class="col-md-6 text-right"> {{ pager.Next(class="btn btn-default") }}</div>
     </div>
 </form>
+</div>
 
 <h2>Current Values</h2>
 <div class="row">

@@ -183,6 +183,13 @@ def attribute_selector():
         elif form.RenameButton.data and form.Rename.data and form.validate_on_submit():
             # Add the attribute to the renamed value
             add_attr(_currAttr, form.Rename.data)
+        elif form.SearchButton.data and form.Search.data and form.validate_on_submit():
+            try:
+                session['attrIndex'] = session['attrList'].index(form.Search.data)
+                return redirect(url_for('.attribute_selector'))
+            except ValueError:
+                flash("There is no attribute with that name", "fail")
+                return redirect(url_for('.attribute_selector'))
 
         # Change current attribute type on pager submit
         if pager.Previous.data:
