@@ -206,12 +206,17 @@ def attribute_selector():
     # Get information about the current attribute
     num_samples, num_projects, examples = get_examples(_currAttr)
 
-    # Get information about the current user's list of attribute types
+    # Get information about the current user's list of attribute types. Also
+    # get a list of ignored samples.
     user_attr = []
+    ignored = []
     for x in get_user().attributes:
         _syn = x['synonym']
-        if _syn not in user_attr:
+        if _syn == 'Ignore':
+            ignored.append(x['name'])
+        elif _syn not in user_attr:
             user_attr.append(_syn)
+
 
     # Get current attribute count
     num_attr = len(session['attrList'])
@@ -220,7 +225,8 @@ def attribute_selector():
     return render_template('attribute.html', form=form, current_user=current_user,
                            attribute=_currAttr, number_attributes=num_attr,
                            current_attr_cnt=curr_attr_num, num_samples=num_samples,
-                           num_projects=num_projects, examples=examples, user_attr=user_attr, pager=pager)
+                           num_projects=num_projects, examples=examples, user_attr=user_attr,
+                           ignored=ignored, pager=pager)
 
 
 @attribute_bp.route("/attributeMap", methods=["GET",])
