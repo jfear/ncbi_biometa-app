@@ -46,49 +46,37 @@ def get_user():
     """
     _user = AttributeSelector.objects(user=current_user.username).first()
     if _user is None:
+        _index = {}
         with open(pkg_resources.resource_filename('biometalib', 'data/flybase_example.yaml'), 'r') as fh:
             attrs = yaml.load(fh, Loader=yaml.RoundTripLoader)
-            AttributeSelector(user=current_user.username, attributes=[{'name': k, 'synonyms': v} for k, v in attrs.items()]).save()
+            _attrs = []
+            for name, syn in attrs.items():
+                for v in syn:
+                    _attrs.append({'name': v, 'synonym':  name})
+                    _index[v] = len(_attrs) - 1
+
+            AttributeSelector(user=current_user.username,
+                              attributes=_attrs,
+                              index=_index).save()
+
             return AttributeSelector.objects(user=current_user.username).first()
     else:
         return _user
 
 
-def get_user_attrs():
-    """Get list of attributes already categorized by the current user.
+def get_attr(name):
+    userDoc = get_user()
 
-    Returns
-    -------
-    list
-        A list of attributes already categorized by the current user.
-    """
-    userAttrs = get_user()
-    _attr = []
-    for doc in userAttrs.attributes:
-        for syn in doc.synonyms:
-            _attr.append(syn)
-    return _attr
+    _idx = userDoc.index.get(name, None)
+
+    if _idx is not None:
+        return userDoc.attributes[_idx]
+    else:
+        return None
 
 
-def filter_attribute_list():
-    """Filter out attributes already categorized by the current user.
-
-    Returns
-    -------
-    list
-        Reversed list of attributes not already categorized by the current user.
-    """
-    all_attrs = get_all_attrs()
-    user_attrs = get_user_attrs()
-    _attrs = []
-    for x in all_attrs:
-        if x not in user_attrs:
-            _attrs.append(x)
-    return _attrs[::-1]
-
-
-def add_attr(key, value):
-    """Add key:value pairs to user selected attributes.
+def add_attr(name, synonym):
+    """Add name:synonym pairs to user selected attributes.
 
     Helper function to add attributes to the current user's document.
     """
@@ -97,47 +85,20 @@ def add_attr(key, value):
 
     # Attribute list for the current user
     userAttrs = userDoc.attributes
+    index = userDoc.index
 
-    # Remove value if already a top level attribute type.
-    userAttrs = [x for x in userAttrs if x.name != value]
+    _idx = index.get(name, None)
 
-    # Remove value if already a synonym.
-    _userAttrs = []
-    for _attr in userAttrs:
-        _attr.synonyms = [x for x in _attr.synonyms if x != value]
-        _userAttrs.append(_attr)
-
-    userAttrs = _userAttrs
-
-    # Iterate over user attributes and append value if key matches attribute name
-    for attr in userAttrs:
-        if attr.name == key:
-            if value not in attr.synonyms:
-                attr.synonyms.append(value)
-                userDoc.update(set__attributes=userAttrs)
-            return
+    if _idx is not None:
+        userAttrs[_idx]['name'] = name
+        userAttrs[_idx]['synonym'] = synonym
+    else:
+        userAttrs.append({'name': name, 'synonym': synonym})
+        index[name] = len(userAttrs) - 1
 
     # If key not a current attribute then create
-    userAttrs.append({'name': key, 'synonyms': [value]})
-    userDoc.update(set__attributes=userAttrs)
+    userDoc.update(set__attributes=userAttrs, set__index=index)
     return
-
-
-def get_index(name, docs, field='name'):
-    """Get index from list of dicts.
-
-    Given a list of dicts, figure out the index that contains the value in the
-    corresponding field.
-
-    Returns
-    -------
-    int or None
-        Retruns the index a value belongs to, or None
-    """
-    for i, doc in enumerate(docs):
-        if doc[field] == name:
-            return i
-    return None
 
 
 def get_examples(currAttr):
@@ -193,24 +154,37 @@ def attribute_selector():
     page will iterate over all attribute types in the database and get user
     input about how to handle the type.
     """
+    # Build forms
     form = AttributeSelectorForm()
     pager = AttributePager()
 
+    # Get session info or build list of attributes.
     session['attrIndex'] = session.get('attrIndex') or 0
     session['attrList'] = session.get('attrList') or get_all_attrs()
+
+    # Get current attribute _type
     _currAttr = session['attrList'][session['attrIndex']]
 
+    # Pre-populate the Rename form if there is already a value.
+    if request.method == 'GET':
+        _cv = get_attr(_currAttr)
+        if _cv is not None:
+            form['Rename'].default = _cv['synonym']
+            form.process()
+
     if request.method == 'POST':
+        # Adjust attribute types on form submit.
         if form.KeepButton.data:
             # Add attribute to the set
             add_attr(_currAttr, _currAttr)
         elif form.IgnoreButton.data:
             # Add the attribute to the ignore
-            add_attr('Ignore', _currAttr)
+            add_attr(_currAttr, 'Ignore')
         elif form.RenameButton.data and form.Rename.data and form.validate_on_submit():
             # Add the attribute to the renamed value
-            add_attr(form.Rename.data, _currAttr)
+            add_attr(_currAttr, form.Rename.data)
 
+        # Change current attribute type on pager submit
         if pager.Previous.data:
             # Decrement the index
             session['attrIndex'] = session['attrIndex'] - 1
