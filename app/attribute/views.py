@@ -188,10 +188,14 @@ def attribute_selector():
         if pager.Previous.data:
             # Decrement the index
             session['attrIndex'] = session['attrIndex'] - 1
+            if session['attrIndex'] < 0:
+                session['attrIndex'] = len(session['attrList']) + session['attrIndex']
             return redirect(url_for('.attribute_selector'))
         elif pager.Next.data:
             # Increment the index
             session['attrIndex'] = session['attrIndex'] + 1
+            if session['attrIndex'] >= len(session['attrList']):
+                session['attrIndex'] = session['attrIndex'] - len(session['attrList'])
             return redirect(url_for('.attribute_selector'))
 
         # Increment the index
@@ -209,8 +213,13 @@ def attribute_selector():
         if _syn not in user_attr:
             user_attr.append(_syn)
 
+    # Get current attribute count
+    num_attr = len(session['attrList'])
+    curr_attr_num = session['attrIndex'] + 1
+
     return render_template('attribute.html', form=form, current_user=current_user,
-                           attribute=_currAttr, current_index=session['attrIndex'], num_samples=num_samples,
+                           attribute=_currAttr, number_attributes=num_attr,
+                           current_attr_cnt=curr_attr_num, num_samples=num_samples,
                            num_projects=num_projects, examples=examples, user_attr=user_attr, pager=pager)
 
 

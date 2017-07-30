@@ -3,7 +3,7 @@
 
 {% block page_content %}
 <div class="page-header">
-  <h1>{{ attribute }}</h1>
+    <h1>{{ attribute }} <span style="font-size:10px;">({{ current_attr_cnt }} of {{ number_attributes }})</span></h1>
   <div>Number BioProjects: {{ num_projects }}</div>
   <div>Number BioSamples: {{ num_samples }}</div>
 </div>
