@@ -203,7 +203,11 @@ def attribute_selector():
     num_samples, num_projects, examples = get_examples(_currAttr)
 
     # Get information about the current user's list of attribute types
-    user_attr = [x['name'] for x in get_user().attributes]
+    user_attr = []
+    for x in get_user().attributes:
+        _syn = x['synonym']
+        if _syn not in user_attr:
+            user_attr.append(_syn)
 
     return render_template('attribute.html', form=form, current_user=current_user,
                            attribute=_currAttr, current_index=session['attrIndex'], num_samples=num_samples,
