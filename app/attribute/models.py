@@ -9,3 +9,4 @@ class AttributeValue(db.EmbeddedDocument):
 class AttributeSelector(db.Document):
     user = db.StringField(primary_key=True)
     attributes = db.ListField(db.EmbeddedDocumentField(AttributeValue), default=list)
+    index = db.DictField()
