@@ -7,6 +7,8 @@ class AttributeSelectorForm(FlaskForm):
     IgnoreButton = SubmitField('Ignore')
     Rename= StringField('Rename To', description="Rename the current attribute to this value.")
     RenameButton = SubmitField('Rename')
+    Search = StringField('Search')
+    SearchButton = SubmitField('Rename')
 
 class AttributePager(FlaskForm):
     Previous = SubmitField('Previous')
