@@ -15,14 +15,14 @@
   </div>
 </div>
 
-  <form action="{{ url_for('.attribute_selector') }}" method="post">
+<form action="{{ url_for('.attribute_selector') }}" method="post">
     {{ form.hidden_tag() }}
     {{ wtf.form_errors(pager, hiddens="only") }}
-<div class="row">
-    <div class="col-md-6 text-left"> {{ pager.Previous(class="btn btn-default") }}</div>
-    <div class="col-md-6 text-right"> {{ pager.Next(class="btn btn-default") }}</div>
-</div>
-  </form>
+    <div class="row">
+        <div class="col-md-6 text-left"> {{ pager.Previous(class="btn btn-default") }}</div>
+        <div class="col-md-6 text-right"> {{ pager.Next(class="btn btn-default") }}</div>
+    </div>
+</form>
 
 <h2>Current Values</h2>
 <div class="row">
@@ -36,7 +36,7 @@
 <h2>My Attribute Types</h2>
 <div class="row">
   {% for attr in user_attr %}
-    <div class="col col-md-4">
+    <div class="col col-md-3">
     {{ attr }}
     </div>
   {% endfor %}
