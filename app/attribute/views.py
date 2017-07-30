@@ -65,8 +65,8 @@ def get_user():
 
 
 def get_attr(name):
+    """Helper to get queried attribute."""
     userDoc = get_user()
-
     _idx = userDoc.index.get(name, None)
 
     if _idx is not None:
