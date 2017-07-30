@@ -41,4 +41,12 @@
     </div>
   {% endfor %}
 </div>
+<h3>Ignored Attributes</h3>
+<div class="row">
+  {% for attr in ignored %}
+    <div class="col col-md-3">
+    {{ attr }}
+    </div>
+  {% endfor %}
+</div>
 {% endblock %}
