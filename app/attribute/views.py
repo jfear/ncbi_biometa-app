@@ -139,7 +139,7 @@ def get_examples(currAttr):
     ])
 
     # Count the number of times each value is present
-    examples = Counter([x['_id'] for x in values])
+    examples = Counter([x['_id'] for x in values if '_id' in x])
 
     return num_samples, num_projects, sorted(examples.items(), key=lambda x: x[0])
 
