@@ -163,6 +163,18 @@ def get_examples(currAttr):
     return num_samples, num_projects, sorted(examples.items(), key=lambda x: x[0])
 
 
+def decrement_index():
+    session['attrIndex'] = session['attrIndex'] - 1
+    if session['attrIndex'] < 0:
+        session['attrIndex'] = len(session['attrList']) + session['attrIndex']
+
+
+def increment_index():
+    session['attrIndex'] = session['attrIndex'] + 1
+    if session['attrIndex'] >= len(session['attrList']):
+        session['attrIndex'] = session['attrIndex'] - len(session['attrList'])
+
+
 @attribute_bp.route("/attribute", methods=["GET", "POST"])
 @login_required
 def attribute_selector():
@@ -213,20 +225,15 @@ def attribute_selector():
         # Change current attribute type on pager submit
         if pager.Previous.data:
             # Decrement the index
-            session['attrIndex'] = session['attrIndex'] - 1
-            if session['attrIndex'] < 0:
-                session['attrIndex'] = len(session['attrList']) + session['attrIndex']
+            decrement_index()
             return redirect(url_for('.attribute_selector'))
         elif pager.Next.data:
             # Increment the index
-            session['attrIndex'] = session['attrIndex'] + 1
-            if session['attrIndex'] >= len(session['attrList']):
-                session['attrIndex'] = session['attrIndex'] - len(session['attrList'])
+            increment_index()
             return redirect(url_for('.attribute_selector'))
 
         # Increment the index
-        session['attrIndex'] = session['attrIndex'] + 1
-
+        increment_index()
         return redirect(url_for('.attribute_selector'))
 
     # Get information about the current attribute
