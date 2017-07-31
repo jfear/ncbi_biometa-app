@@ -64,6 +64,25 @@ def get_user():
         return _user
 
 
+def get_other_users():
+    oUsers = []
+    for oAttr in AttributeSelector.objects():
+        if oAttr.user != current_user.username:
+            oUsers.append(oAttr)
+    return oUsers
+
+
+def get_other_users_thoughts(currAttr):
+    oUsers = get_other_users()
+    thoughts = []
+    for ouser in oUsers:
+        if currAttr in ouser.index:
+            user = ouser.user
+            syn = ouser.attributes[ouser.index[currAttr]]['synonym']
+            thoughts.append((user, syn))
+    return thoughts
+
+
 def get_attr(name):
     """Helper to get queried attribute."""
     userDoc = get_user()
@@ -213,6 +232,9 @@ def attribute_selector():
     # Get information about the current attribute
     num_samples, num_projects, examples = get_examples(_currAttr)
 
+    # Get what other users say the current attribute should be
+    other_users = get_other_users_thoughts(_currAttr)
+
     # Get information about the current user's list of attribute types. Also
     # get a list of ignored samples.
     user_attr = []
@@ -224,7 +246,6 @@ def attribute_selector():
         elif _syn not in user_attr:
             user_attr.append(_syn)
 
-
     # Get current attribute count
     num_attr = len(session['attrList'])
     curr_attr_num = session['attrIndex'] + 1
@@ -233,47 +254,4 @@ def attribute_selector():
                            attribute=_currAttr, number_attributes=num_attr,
                            current_attr_cnt=curr_attr_num, num_samples=num_samples,
                            num_projects=num_projects, examples=examples, user_attr=user_attr,
-                           ignored=ignored, pager=pager)
-
-
-@attribute_bp.route("/attributeMap", methods=["GET",])
-def attribute_map():
-    """Summary page of attribute type classification.
-
-    It may be useful to look at all of the attributes and see how other users
-    have classified them. This is a simple summary page where usernames are
-    placed next to the attribute type. Top level attributes are the user's
-    naming designation, while sub attributes are to be renamed to the top level
-    attribute type.
-
-    All of this code is data munging. The database is organized by user at the
-    top level, I need attribute at the top level and then a list of users that
-    have that attribute.
-    """
-    attrDict = json.loads(AttributeSelector.objects.to_json())
-
-    # Make a new list to hold the re-organizedata.
-    attrs = []
-    # Iterate over each user
-    for user in attrDict:
-        username = user['_id']
-        for _attr in user['attributes']:
-            _name = _attr['name']
-            _syn = _attr['synonyms']
-            _idx = get_index(_name, attrs)
-            if _idx is None:
-                _doc = {'name': _name, 'users': [username, ], 'synonyms': []}
-                for n in _syn:
-                    _doc['synonyms'].append({'name': n, 'users': [username, ]})
-                attrs.append(_doc)
-            else:
-                _doc = attrs[_idx]
-                _doc['users'].append(username)
-                for s in _syn:
-                    _i = get_index(s, _doc['synonyms'])
-                    if _i is not None:
-                        _doc['synonyms'][_i]['users'].append(username)
-                    else:
-                        _doc['synonyms'].append({'name': s, 'users': [username, ]})
-
-    return render_template('attribute_map.html', attributes=attrs)
+                           ignored=ignored, pager=pager, thoughts=other_users)

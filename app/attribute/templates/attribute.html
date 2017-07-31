@@ -48,6 +48,17 @@
   {% endfor %}
 </div>
 
+{% if thoughts|length > 0 %}
+<h2>Other Curator's Thoughts</h2>
+<div class="container">
+  <div class="row">
+    {% for thought in thoughts %}
+    <div class="col col-md4"><span style="font-weight: bold;">{{ thought[0] }}</span>[{{ thought[1] }}]</div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
 <h2>My Attribute Types</h2>
 <div class="row">
   {% for attr in user_attr %}
