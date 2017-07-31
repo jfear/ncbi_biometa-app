@@ -64,6 +64,25 @@ def get_user():
         return _user
 
 
+def get_other_users():
+    oUsers = []
+    for oAttr in AttributeSelector.objects():
+        if oAttr.user != current_user.username:
+            oUsers.append(oAttr)
+    return oUsers
+
+
+def get_other_users_thoughts(currAttr):
+    oUsers = get_other_users()
+    thoughts = []
+    for ouser in oUsers:
+        if currAttr in ouser.index:
+            user = ouser.user
+            syn = ouser.attributes[ouser.index[currAttr]]['synonym']
+            thoughts.append((user, syn))
+    return thoughts
+
+
 def get_attr(name):
     """Helper to get queried attribute."""
     userDoc = get_user()
@@ -213,6 +232,9 @@ def attribute_selector():
     # Get information about the current attribute
     num_samples, num_projects, examples = get_examples(_currAttr)
 
+    # Get what other users say the current attribute should be
+    other_users = get_other_users_thoughts(_currAttr)
+
     # Get information about the current user's list of attribute types. Also
     # get a list of ignored samples.
     user_attr = []
@@ -224,7 +246,6 @@ def attribute_selector():
         elif _syn not in user_attr:
             user_attr.append(_syn)
 
-
     # Get current attribute count
     num_attr = len(session['attrList'])
     curr_attr_num = session['attrIndex'] + 1
@@ -233,4 +254,4 @@ def attribute_selector():
                            attribute=_currAttr, number_attributes=num_attr,
                            current_attr_cnt=curr_attr_num, num_samples=num_samples,
                            num_projects=num_projects, examples=examples, user_attr=user_attr,
-                           ignored=ignored, pager=pager)
+                           ignored=ignored, pager=pager, thoughts=other_users)
