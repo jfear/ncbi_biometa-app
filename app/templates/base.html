@@ -28,7 +28,6 @@
         <ul class="nav navbar-nav"></ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="{{ url_for('attribute.attribute_selector') }}">Attribute Selector</a></li>
-          <li><a href="{{ url_for('attribute.attribute_map') }}">Attribute Summary</a></li>
           {% if current_user.is_authenticated %}
           <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
           {% else %}
