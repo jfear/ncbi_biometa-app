@@ -176,8 +176,9 @@ def increment_index():
 
 
 @attribute_bp.route("/attribute", methods=["GET", "POST"])
+@attribute_bp.route("/attribute/<term>", methods=["GET"])
 @login_required
-def attribute_selector():
+def attribute_selector(term=None):
     """Run the attribute selector.
 
     Originally designed as a CLI, attribute selector is a way to look at all
@@ -202,6 +203,14 @@ def attribute_selector():
         if _cv is not None:
             form['Rename'].default = _cv['synonym']
             form.process()
+
+        if term is not None:
+            try:
+                session['attrIndex'] = session['attrList'].index(term)
+                return redirect(url_for('.attribute_selector'))
+            except ValueError:
+                flash("There is no attribute with that name", "fail")
+                return redirect(url_for('.attribute_selector'))
 
     if request.method == 'POST':
         # Adjust attribute types on form submit.
